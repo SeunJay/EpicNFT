@@ -13,8 +13,6 @@ const OPENSEA_LINK =
   "https://testnets.opensea.io/collection/squarenft-7kb1zv4ikz";
 // const TOTAL_MINT_COUNT = 50;
 
-
-
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [loading, setLoading] = useState(false);
@@ -52,31 +50,31 @@ const App = () => {
   /*
    * Implement your connectWallet method here
    */
-  // const connectWallet = async () => {
-  //   try {
-  //     const { ethereum } = window;
+  const connectWallet = async () => {
+    try {
+      const { ethereum } = window;
 
-  //     if (!ethereum) {
-  //       alert("Get MetaMask!");
-  //       return;
-  //     }
+      if (!ethereum) {
+        alert("Get MetaMask!");
+        return;
+      }
 
-  //     /*
-  //      * Fancy method to request access to account.
-  //      */
-  //     const accounts = await ethereum.request({
-  //       method: "eth_requestAccounts",
-  //     });
+      /*
+       * Fancy method to request access to account.
+       */
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
 
-  //     /*
-  //      * Boom! This should print out public address once we authorize Metamask.
-  //      */
-  //     console.log("Connected", accounts[0]);
-  //     setCurrentAccount(accounts[0]);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+      /*
+       * Boom! This should print out public address once we authorize Metamask.
+       */
+      console.log("Connected", accounts[0]);
+      setCurrentAccount(accounts[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     checkIfWalletIsConnected();
@@ -120,7 +118,10 @@ const App = () => {
 
   // Render Methods
   const renderNotConnectedContainer = () => (
-    <button className="cta-button connect-wallet-button">
+    <button
+      className="cta-button connect-wallet-button"
+      onClick={connectWallet}
+    >
       Connect to Wallet
     </button>
   );
