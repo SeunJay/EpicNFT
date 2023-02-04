@@ -4,6 +4,7 @@ import myEpicNft from "./utils/MyEpicNFT.json";
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { Link } from "react-router-dom";
+import { ColorRing } from "react-loader-spinner";
 
 // Constants
 const TWITTER_HANDLE = "iamseunjay";
@@ -12,8 +13,12 @@ const OPENSEA_LINK =
   "https://testnets.opensea.io/collection/squarenft-7kb1zv4ikz";
 // const TOTAL_MINT_COUNT = 50;
 
+
+
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const checkIfWalletIsConnected = async () => {
     /*
      * First make sure we have access to window.ethereum
@@ -92,11 +97,15 @@ const App = () => {
           signer
         );
 
+        setLoading(true);
+
         console.log("Going to pop wallet now to pay gas...");
         let nftTxn = await connectedContract.makeAnEpicNFT();
 
         console.log("Mining...please wait.");
         await nftTxn.wait();
+
+        setLoading(false);
 
         console.log(
           `Mined, see transaction: https://goerli.etherscan.io/tx/${nftTxn.hash}`
@@ -124,16 +133,30 @@ const App = () => {
           <p className="sub-text">
             Each unique. Each beautiful. Discover your NFT today.
           </p>
+
           {currentAccount === "" ? (
             renderNotConnectedContainer()
           ) : (
             <button
               onClick={mintNFT}
               className="cta-button connect-wallet-button"
+              disabled={loading}
             >
               Mint NFT
             </button>
           )}
+        </div>
+
+        <div className="">
+          <ColorRing
+            visible={loading}
+            height="80"
+            width="80"
+            ariaLabel="blocks-loading"
+            wrapperStyle={{}}
+            // wrapperClass="blocks-wrapper"
+            colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+          />
         </div>
 
         <div className="">
@@ -143,6 +166,7 @@ const App = () => {
             </button>
           </Link>
         </div>
+
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
           <a
